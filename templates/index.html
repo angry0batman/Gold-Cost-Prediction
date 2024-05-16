@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Price Prediction</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gold Price Prediction</h1>
+        <form id="predictionForm">
+            <label for="feature1">SPX:</label>
+            <input type="text" id="SPX" name="SPX">
+            <br>
+            <label for="feature2">USO:</label>
+            <input type="text" id="USO" name="USO">
+            <br>
+            <label for="feature3">SLV:</label>
+            <input type="text" id="SLV" name="SLV">
+            <br>
+            <label for="feature4">EUR/USD:</label>
+            <input type="text" id="EUR/USD" name="EUR/USD">
+            <br>
+            <button type="button" onclick="makePrediction()">Predict</button>
+        </form>
+        <h2 id="result"></h2>
+    </div>
+
+    <script>
+        async function makePrediction() {
+            const SPX = document.getElementById('SPX').value;
+            const USO = document.getElementById('USO').value;
+            const SLV = document.getElementById('SLV').value;
+            const EUR_USD = document.getElementById('EUR/USD').value;
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    SPX: parseFloat(SPX),
+                    USO: parseFloat(USO),
+                    SLV: parseFloat(SLV),
+                    'EUR/USD': parseFloat(EUR_USD),
+                }),
+            });
+
+            const data = await response.json();
+            document.getElementById('result').innerText = `Predicted Price: ${data.prediction.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
